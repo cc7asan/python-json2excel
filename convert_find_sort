@@ -1,0 +1,143 @@
+import json, csv
+import pandas as pd
+
+with open('C:/Users/hsnsh/Documents/students2021.json') as f:
+ data = json.load(f)
+
+print(data)
+
+data2=pd.read_json(data)
+data2.to_csv("findppl.csv")
+
+
+# Formatting
+old_list =  pd.read_excel('C:/Users/hsnsh/Documents/Voters List (Oct 10, 2019).xlsx', sheet_name='New')
+new_list = pd.read_excel('C:/Users/hsnsh/Documents/Students_2021.xlsx', sheet_name='students')
+
+comp_list = old_list['Full name'].tolist()
+
+new_list['Old']='New'
+for i in new_list.itertuples():
+    if i._1 in comp_list:
+        new_list.at[i.Index,'Old']='old'
+
+new_list.to_csv("newstudents_2021.csv")
+
+sortmajors=pd.read_excel(r"C:\Users\hsnsh\PycharmProjects\parser\newstudents_2021.xlsx", sheet_name="new students filtered")
+
+FAFS=['Agribusiness','Agricultural Economics','Agriculture'
+'Animal Science','Food Safety','Food Science & Management',
+'Food Security','Food Technology','Landscape Architecture','Nutr.& Diet.Coordinated Progr.','Nutrition',
+'Nutrition & Dietetics','Public Health Nutrition']
+
+FAS=['Anthropology','Applied Mathematics','Arab and Middle Eastern Hist.',
+'Arabic Language & Literature',
+'Archaeology',
+'Art History',
+'Art History & Curating',
+'Biochemistry',
+'Biology',
+'Cell and Molecular Biology',
+'Chemistry',
+'Computer Science',
+'Economics',
+'Education/Elementary'
+,'Education/Secondary'
+,'English',
+'English Language'
+,'English Literature'
+,'Environmental Policy Planning'
+'Geology',
+'History',
+'Islamic Studies','Majorless',
+'Mathematics',
+'Media Communication',
+'Media Studies',
+'Middle Eastern Studies',
+'Petroleum Studies',
+'Philosophy',
+'Physics',
+'Political Studies',
+'Psychology',
+'Public Administration',
+'Public Policy &Internat.Affair'
+,'Sociology',
+'Sociology & Anthropology',
+'Statistics', 'Financial Economics'
+]
+
+FEA_Engineering=["Elect.& Comput.Eng'g NonThesis",
+"Elect.& Comput.Eng'g Thesis",
+"Electrical & Computer Eng'g",
+"Env. & Water Resources Eng'g.",
+"Not Working for a Degree Eng'g"
+ ,'Applied Energy'
+  ,'Biomedical Engineering'
+   ,'Chemical Engineering'
+ ,'Civil Engineering'
+  ,'Civil Engineering Thesis'
+   ,'Computer & Communications Eng.'
+  ,'Construction Engineering'
+   ,'Conversational English (CEC)'
+    ,'Engineering Management'
+ ,'Industrial Engineering'
+  ,'Mechanical Engineering'
+,'Visiting Engineering']
+FEA_Energy = ['Energy','Energy Studies']
+FEA_Ard=['Architecture',
+'Graphic Design',
+'Urban Design','Urban Planning and Policy'
+]
+
+FHS=['Environmental Health'
+,'Environmental Technology'
+,'Epidemiology'
+,'Master of Public Health (II)'
+,'Medical Audiology Sciences'
+,'Medical Imaging Sciences'
+,'Medical Laboratory Sciences'
+]
+
+FM=['Biomedical Sciences'
+,'Clinical Psychology'
+,'Doctor of Medicine'
+,'Microbiology & Immunology'
+,'Neuroscience'
+,'Nursing'
+,'Physiology'
+]
+
+OSB=['Business Administration'
+,'Essentials Business'
+,'Finance'
+,'M.Busines Analytics'
+,'Visiting Business'
+]
+sortmajors['Major']=sortmajors['Major'].str.strip()
+for i in sortmajors.itertuples():
+    if i.Major in FAFS:
+        sortmajors.at[i.Index,'Faculty']='FAFS'
+    elif i.Major in FEA_Ard:
+        sortmajors.at[i.Index, 'Faculty'] = 'FEA ArD'
+
+    elif i.Major in FEA_Energy:
+        sortmajors.at[i.Index, 'Faculty'] = 'FEA Energy'
+
+    elif i.Major in FEA_Engineering:
+        sortmajors.at[i.Index, 'Faculty'] = 'FEA Engineering'
+
+    elif i.Major in FAS:
+        sortmajors.at[i.Index, 'Faculty'] = 'FAS'
+
+
+    elif i.Major in FHS:
+        sortmajors.at[i.Index, 'Faculty'] = 'FHS'
+
+
+    if i.Major in OSB:
+        sortmajors.at[i.Index, 'Faculty'] = 'OSB'
+
+    if i.Major in FM:
+        sortmajors.at[i.Index, 'Faculty'] = 'FM'
+
+sortmajors.to_csv("newstudents_sortedmajors.csv")
